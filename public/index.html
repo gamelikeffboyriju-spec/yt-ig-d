@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRONX ULTRA - Premium Video Downloader | Instagram & YouTube</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            top: -20%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: #00ffff;
+            animation: float1 15s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            bottom: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: #ff00ff;
+            animation: float2 18s ease-in-out infinite;
+        }
+
+        .orb-3 {
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: #ffaa00;
+            animation: float3 20s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-100px, -50px) scale(1.3); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ffff, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+            50% { text-shadow: 0 0 60px rgba(255, 0, 255, 0.5); }
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Platform Selector */
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .platform-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .platform-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .platform-btn i {
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .platform-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .platform-btn.active {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .platform-btn.instagram.active {
+            box-shadow: 0 0 30px rgba(228, 64, 95, 0.5);
+            border-color: #e4405f;
+        }
+
+        .platform-btn.youtube.active {
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            border-color: #ff0000;
+        }
+
+        /* URL Input Section */
+        .url-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .url-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results {
+            margin-top: 40px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 255, 255, 0.3);
+        }
+
+        .video-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .video-thumbnail {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .video-thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .video-info {
+            flex: 1;
+        }
+
+        .video-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .quality-selector {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .quality-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #00ffff;
+        }
+
+        .quality-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .quality-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .quality-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            transform: translateY(-2px);
+        }
+
+        .quality-btn.active {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-color: transparent;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .download-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            color: #ff4444;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .platform-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .video-header {
+                flex-direction: column;
+            }
+            
+            .video-thumbnail {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">BRONX ULTRA</h1>
+            <p class="subtitle">Premium Video Downloader | Instagram & YouTube</p>
+        </div>
+
+        <div class="platform-selector">
+            <div class="platform-btn instagram active" data-platform="instagram">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </div>
+            <div class="platform-btn youtube" data-platform="youtube">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube</span>
+            </div>
+        </div>
+
+        <div class="url-section">
+            <div class="input-group">
+                <input type="text" class="url-input" id="urlInput" placeholder="Paste video URL here...">
+                <button class="download-btn" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+
+        <div id="results" class="results"></div>
+
+        <div class="footer">
+            <p>© 2024 BRONX ULTRA - Powered by @BRONX_ULTRA | All Rights Reserved</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPlatform = 'instagram';
+        let currentVideoData = null;
+
+        // Platform selector
+        document.querySelectorAll('.platform-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentPlatform = btn.dataset.platform;
+                document.getElementById('results').innerHTML = '';
+                currentVideoData = null;
+            });
+        });
+
+        // Download button click
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                showError('Please enter a video URL');
+                return;
+            }
+
+            // Validate URL based on platform
+            if (currentPlatform === 'instagram' && !url.includes('instagram.com')) {
+                showError('Please enter a valid Instagram URL');
+                return;
+            }
+            if (currentPlatform === 'youtube' && !url.includes('youtube.com') && !url.includes('youtu.be')) {
+                showError('Please enter a valid YouTube URL');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const response = await fetch(`/api/download?url=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                
+                if (data.status === 1 && data.data) {
+                    currentVideoData = data.data;
+                    displayResults(data.data);
+                } else {
+                    showError(data.error || 'Failed to fetch video data. Please check the URL.');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+                console.error(error);
+            }
+        });
+
+        function showLoading() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Fetching video data...</p>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i> ${message}
+                </div>
+            `;
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (currentPlatform === 'instagram') {
+                displayInstagramResults(data);
+            } else {
+                displayYouTubeResults(data);
+            }
+        }
+
+        function displayInstagramResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const media = data.media || [];
+            const videoMedia = media.find(m => m.type === 'video');
+            
+            if (!videoMedia || !videoMedia.resources || videoMedia.resources.length === 0) {
+                showError('No downloadable videos found for this Instagram post');
+                return;
+            }
+
+            const qualities = videoMedia.resources.map(r => ({
+                quality: r.quality,
+                url: r.download_url,
+                size: r.size
+            })).filter(q => q.url);
+
+            let selectedQuality = qualities[0];
+
+            resultsDiv.innerHTML = `
+                <div class="video-card">
+                    <div class="video-header">
+                        <img src="${data.thumbnail}" class="video-thumbnail" alt="Thumbnail" onclick="window.open('${data.thumbnail}', '_blank')">
+                        <div class="video-info">
+                            <div class="video-title">${escapeHtml(data.title || 'Instagram Video')}</div>
+                            <div class="video-meta">
+                                <span><i class="fas fa-heart"></i> ${formatNumber(data.like_count || 0)}</span>
+                                <span><i class="fas fa-comment"></i> ${formatNumber(data.comment_count || 0)}</span>
+                                <span><i class="fab fa-instagram"></i> Instagram Reel</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quality-selector">
+                        <div class="quality-title">Select Quality:</div>
+                        <div class="quality-buttons" id="qualityButtons">
+                            ${qualities.map((q, idx) => `
+                                <button class="quality-btn ${idx === 0 ? 'active' : ''}" data-quality="${idx}">
+                                    ${q.quality || 'HD'} ${q.size ? `(${formatBytes(q.size)})` : ''}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <a href="${selectedQuality.url}" class="download-link" download target="_blank">
+                            <i class="fas fa-download"></i> Download ${selectedQuality.quality || 'Video'}
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            // Quality selector handler
+            const qualityBtns = document.querySelectorAll('.quality-btn');
+            const downloadLink = document.querySelector('.download-link');
+            
+            qualityBtns.forEach((btn, idx) => {
+                btn.addEventListener('click', () => {
+                    qualityBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedQuality = qualities[idx];
+                    downloadLink.href = selectedQuality.url;
+                    downloadLink.innerHTML = `<i class="fas fa-download"></i> Download ${selectedQuality.quality || 'Video'}`;
+                });
+            });
+        }
+
+        function displayYouTubeResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const videoMedia = data.media?.find(m => m.type === 'video');
+            
+            if (!videoMedia || !videoMedia.resources || videoMedia.resources.length === 0) {
+                showError('No downloadable videos found for this YouTube video');
+                return;
+            }
+
+            const qualities = videoMedia.resources.map(r => ({
+                quality: r.quality || 'MP4',
+                url: r.download_url,
+                size: r.size
+            })).filter(q => q.url);
+
+            let selectedQuality = qualities[0];
+
+            resultsDiv.innerHTML = `
+                <div class="video-card">
+                    <div class="video-header">
+                        <img src="${data.thumbnail}" class="video-thumbnail" alt="Thumbnail" onclick="window.open('${data.thumbnail}', '_blank')">
+                        <div class="video-info">
+                            <div class="video-title">${escapeHtml(data.title || 'YouTube Video')}</div>
+                            <div class="video-meta">
+                                <span><i class="fas fa-clock"></i> ${formatDuration(data.duration)}</span>
+                                <span><i class="fab fa-youtube"></i> YouTube</span>
+                                ${data.user_item?.nickname ? `<span><i class="fas fa-user"></i> ${escapeHtml(data.user_item.nickname)}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quality-selector">
+                        <div class="quality-title">Select Quality:</div>
+                        <div class="quality-buttons" id="qualityButtons">
+                            ${qualities.map((q, idx) => `
+                                <button class="quality-btn ${idx === 0 ? 'active' : ''}" data-quality="${idx}">
+                                    ${q.quality} ${q.size ? `(${formatBytes(q.size)})` : ''}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <a href="${selectedQuality.url}" class="download-link" download target="_blank">
+                            <i class="fas fa-download"></i> Download ${selectedQuality.quality}
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            // Quality selector handler
+            const qualityBtns = document.querySelectorAll('.quality-btn');
+            const downloadLink = document.querySelector('.download-link');
+            
+            qualityBtns.forEach((btn, idx) => {
+                btn.addEventListener('click', () => {
+                    qualityBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedQuality = qualities[idx];
+                    downloadLink.href = selectedQuality.url;
+                    downloadLink.innerHTML = `<i class="fas fa-download"></i> Download ${selectedQuality.quality}`;
+                });
+            });
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0 || !bytes) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds) return 'N/A';
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
